@@ -1,0 +1,26 @@
+@guard_begin@@headers@#define TRY_ERROR_TYPE @TRY_ERROR_TYPE@
+
+#define TRY_OK_VALUE @TRY_OK_VALUE@
+
+#define TRY_BODY(block) \
+  { \
+    TRY_ERROR_TYPE try_result = TRY_OK_VALUE; \
+    block \
+    return try_result; \
+  }
+
+#define TRY(expression) \
+  do { \
+    TRY_ERROR_TYPE try_result = (expression); \
+    if (try_result != TRY_OK_VALUE) { \
+      return try_result; \
+    } \
+  } while (0)
+
+#define TRY_GOTO(expression, label) \
+  do { \
+    try_result = (expression); \
+    if (try_result != TRY_OK_VALUE) { \
+      goto label; \
+    } \
+  } while (0)@custom@@guard_end@
