@@ -4,7 +4,7 @@ set(_TryForC_DIRECTORY "${CMAKE_CURRENT_LIST_FILE}")
 get_filename_component(_TryForC_DIRECTORY "${_TryForC_DIRECTORY}" DIRECTORY)
 
 function(generate_try_for_c)
-  set(one_args ERROR_TYPE OK_VALUE INCLUDE_GUARD CUSTOM_CONTENT FILE_NAME)
+  set(one_args ERROR_TYPE OK_VALUE INCLUDE_GUARD CUSTOM_CONTENT FILE_NAME IS_ERROR_OP)
   cmake_parse_arguments(PARSE_ARGV 0 TRY "" "${one_args}" HEADERS)
 
   set(headers "")
@@ -13,6 +13,11 @@ function(generate_try_for_c)
   endforeach()
   if(NOT headers STREQUAL "")
     string(APPEND headers "\n")
+  endif()
+
+  set(is_error_op "((left) != (right))")
+  if(DEFINED TRY_IS_ERROR_OP AND NOT TRY_IS_ERROR_OP STREQUAL "")
+    set(is_error_op "${TRY_IS_ERROR_OP}")
   endif()
 
   set(guard_begin "#pragma once\n\n")

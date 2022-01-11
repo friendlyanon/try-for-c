@@ -44,3 +44,19 @@ target_include_directories(
 )
 
 add_test(NAME try_for_c.multi COMMAND multiple_int_test CONFIGURATIONS Debug)
+
+add_executable(struct_error_test struct_error_test.c struct_error.c)
+generate_try_for_c(
+    ERROR_TYPE "struct error"
+    OK_VALUE error_ok
+    IS_ERROR_OP "(!error_is_ok(left))"
+    HEADERS struct_error.h
+    FILE_NAME struct_error_test_d/try.h
+)
+target_include_directories(
+    struct_error_test PRIVATE
+    "${PROJECT_BINARY_DIR}/struct_error_test_d"
+    "${PROJECT_SOURCE_DIR}"
+)
+
+add_test(NAME try_for_c.struct COMMAND struct_error_test CONFIGURATIONS Debug)
